@@ -1,38 +1,34 @@
 package com.example.application.views.accessdenied;
 
-import com.vaadin.flow.component.html.H2;
+import com.example.application.views.MainLayout;
+import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
-import com.vaadin.flow.theme.lumo.LumoUtility.Margin;
-import org.vaadin.lineawesome.LineAwesomeIconUrl;
 
-@PageTitle("Access Denied")
-@Route("access-denied")
-@Menu(order = 7, icon = LineAwesomeIconUrl.FILE)
 @AnonymousAllowed
+@PageTitle("Pääsy evätty | Leffakerho")
+@Route(value = "access-denied", layout = MainLayout.class)
 public class AccessDeniedView extends VerticalLayout {
 
     public AccessDeniedView() {
         setSpacing(false);
-
-        Image img = new Image("images/empty-plant.png", "placeholder plant");
-        img.setWidth("200px");
-        add(img);
-
-        H2 header = new H2("This place intentionally left empty");
-        header.addClassNames(Margin.Top.XLARGE, Margin.Bottom.MEDIUM);
-        add(header);
-        add(new Paragraph("It’s a place where you can grow your own UI 🤗"));
-
         setSizeFull();
+        setAlignItems(Alignment.CENTER);
         setJustifyContentMode(JustifyContentMode.CENTER);
-        setDefaultHorizontalComponentAlignment(Alignment.CENTER);
-        getStyle().set("text-align", "center");
-    }
 
+        Image image = new Image("images/access-denied.png", "Pääsy evätty");
+        image.setWidth("200px");
+
+        H1 header = new H1("Pääsy evätty!");
+        header.getStyle().set("color", "var(--lumo-error-text-color)");
+
+        Paragraph text = new Paragraph("Sinulla ei ole tarvittavia oikeuksia tälle sivulle.");
+        text.getStyle().set("text-align", "center");
+
+        add(image, header, text);
+    }
 }

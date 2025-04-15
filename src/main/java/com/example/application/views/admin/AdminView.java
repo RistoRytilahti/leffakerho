@@ -1,38 +1,36 @@
 package com.example.application.views.admin;
 
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.html.Paragraph;
+import com.example.application.views.MainLayout;
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.theme.lumo.LumoUtility.Margin;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
 import jakarta.annotation.security.RolesAllowed;
-import org.vaadin.lineawesome.LineAwesomeIconUrl;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 
-@PageTitle("Admin")
-@Route("admin")
-@Menu(order = 4, icon = LineAwesomeIconUrl.FILE)
-@RolesAllowed("ADMIN")
-public class AdminView extends VerticalLayout {
+@PageTitle("Ylläpito | Leffakerho")
+@Route(value = "admin", layout = MainLayout.class)
+@RolesAllowed({"ROLE_ADMIN"})
+public class AdminView extends VerticalLayout implements BeforeEnterObserver {
 
     public AdminView() {
-        setSpacing(false);
-
-        Image img = new Image("images/empty-plant.png", "placeholder plant");
-        img.setWidth("200px");
-        add(img);
-
-        H2 header = new H2("This place intentionally left empty");
-        header.addClassNames(Margin.Top.XLARGE, Margin.Bottom.MEDIUM);
-        add(header);
-        add(new Paragraph("It’s a place where you can grow your own UI 🤗"));
-
-        setSizeFull();
-        setJustifyContentMode(JustifyContentMode.CENTER);
-        setDefaultHorizontalComponentAlignment(Alignment.CENTER);
-        getStyle().set("text-align", "center");
+        // Tämä on vain esimerkki sisältöä admin-sivulla
+        Text text = new Text("Tervetuloa Admin-sivulle! Vain admin voi nähdä tämän.");
+        add(text);
     }
 
+    @Override
+    public void beforeEnter(BeforeEnterEvent event) {
+        // Tarkistetaan käyttäjän rooli käyttäen Spring Security
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (currentUser == null || !currentUser.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"))) {
+            // Jos käyttäjä ei ole admin, ohjataan "access-denied" sivulle
+            event.forwardTo("access-denied");
+        }
+    }
 }

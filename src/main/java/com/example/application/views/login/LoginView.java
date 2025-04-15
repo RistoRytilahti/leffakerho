@@ -10,10 +10,11 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.internal.RouteUtil;
 import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 @AnonymousAllowed
+@Route("login")
 @PageTitle("Login")
-@Route(value = "login")
 public class LoginView extends LoginOverlay implements BeforeEnterObserver {
 
     private final AuthenticatedUser authenticatedUser;
@@ -22,9 +23,10 @@ public class LoginView extends LoginOverlay implements BeforeEnterObserver {
         this.authenticatedUser = authenticatedUser;
         setAction(RouteUtil.getRoutePath(VaadinService.getCurrent().getContext(), getClass()));
 
+        // Set localized text for the login form
         LoginI18n i18n = LoginI18n.createDefault();
         i18n.setHeader(new LoginI18n.Header());
-        i18n.getHeader().setTitle("Leffakerho");
+        i18n.getHeader().setTitle("LEFFAKERHO: Kirjaudu sisään");
         i18n.getHeader().setDescription("Login using user/user or admin/admin");
         i18n.setAdditionalInformation(null);
         setI18n(i18n);
@@ -36,11 +38,12 @@ public class LoginView extends LoginOverlay implements BeforeEnterObserver {
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
         if (authenticatedUser.get().isPresent()) {
-            // Already logged in
+            // User is already logged in, so redirect to the main page
             setOpened(false);
-            event.forwardTo("");
+            event.forwardTo("main"); // Redirect to the "main" view after successful login
+        } else {
+            // If the user is not logged in, set the error flag if the query contains "error"
+            setError(event.getLocation().getQueryParameters().getParameters().containsKey("error"));
         }
-
-        setError(event.getLocation().getQueryParameters().getParameters().containsKey("error"));
     }
 }

@@ -9,21 +9,16 @@ import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Footer;
-import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Header;
+import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.SvgIcon;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.sidenav.SideNav;
 import com.vaadin.flow.component.sidenav.SideNavItem;
 import com.vaadin.flow.router.Layout;
 import com.vaadin.flow.server.StreamResource;
-import com.vaadin.flow.server.auth.AccessAnnotationChecker;
-import com.vaadin.flow.server.auth.AnonymousAllowed;
-import com.vaadin.flow.server.menu.MenuConfiguration;
-import com.vaadin.flow.server.menu.MenuEntry;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import java.io.ByteArrayInputStream;
 import java.util.List;
@@ -33,18 +28,15 @@ import java.util.Optional;
  * The main view is a top-level placeholder for other views.
  */
 @Layout
-@AnonymousAllowed
 public class MainLayout extends AppLayout {
 
     private H1 viewTitle;
-
     private AuthenticatedUser authenticatedUser;
-    private AccessAnnotationChecker accessChecker;
 
-    public MainLayout(AuthenticatedUser authenticatedUser, AccessAnnotationChecker accessChecker) {
+    public MainLayout(AuthenticatedUser authenticatedUser) {
         this.authenticatedUser = authenticatedUser;
-        this.accessChecker = accessChecker;
 
+        // Määritellään pääosio ja lisätään sisältö
         setPrimarySection(Section.DRAWER);
         addDrawerContent();
         addHeaderContent();
@@ -73,14 +65,12 @@ public class MainLayout extends AppLayout {
     private SideNav createNavigation() {
         SideNav nav = new SideNav();
 
-        List<MenuEntry> menuEntries = MenuConfiguration.getMenuEntries();
-        menuEntries.forEach(entry -> {
-            if (entry.icon() != null) {
-                nav.addItem(new SideNavItem(entry.title(), entry.path(), new SvgIcon(entry.icon())));
-            } else {
-                nav.addItem(new SideNavItem(entry.title(), entry.path()));
-            }
-        });
+        // Lisätään navigointikohteet käsin
+        nav.addItem(new SideNavItem("Koti", "main", new Icon("lumo", "star")));
+        nav.addItem(new SideNavItem("Elokuvat", "movies", new Icon("lumo", "film")));
+        nav.addItem(new SideNavItem("Profiili", "profile", new Icon("lumo", "user")));
+        nav.addItem(new SideNavItem("Arvostelut", "reviews", new Icon("lumo", "star")));
+        nav.addItem(new SideNavItem("Admin", "admin", new Icon("lumo", "user")));
 
         return nav;
     }
@@ -129,6 +119,7 @@ public class MainLayout extends AppLayout {
     }
 
     private String getCurrentPageTitle() {
-        return MenuConfiguration.getPageHeader(getContent()).orElse("");
+        // Tämä metodi voi palauttaa näkymän otsikon
+        return "Leffakerho"; // Tai voit palauttaa näkymän nimen (käytetään vaihtoehtoista logiikkaa)
     }
 }
