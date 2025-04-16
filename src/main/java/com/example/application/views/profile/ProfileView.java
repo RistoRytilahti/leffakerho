@@ -22,7 +22,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 @PageTitle("Profiili | Leffakerho")
 @Route(value = "profile", layout = MainLayout.class)
 @RolesAllowed({"ROLE_USER", "ROLE_ADMIN"})
-public class ProfileView extends VerticalLayout {
+public class ProfileView extends FormLayout {
 
     private final AuthenticatedUser authenticatedUser;
     private final UserService userService;
@@ -30,6 +30,7 @@ public class ProfileView extends VerticalLayout {
 
     private TextField nameField;
     private TextField emailField;
+
     private Grid<Movie> userMoviesGrid;
 
     public ProfileView(AuthenticatedUser authenticatedUser, UserService userService, MovieService movieService) {
@@ -37,73 +38,38 @@ public class ProfileView extends VerticalLayout {
         this.userService = userService;
         this.movieService = movieService;
 
-        setSpacing(true);
-        setPadding(true);
-        setWidth("100%");
-
         // Haetaan nykyinen käyttäjä
         User currentUser = authenticatedUser.get().orElse(null);
         if (currentUser != null) {
-            createProfileSection(currentUser);
-            createMoviesSection(currentUser);
+            // Käyttäjän tiedot esitäytettynä
+            nameField = new TextField("Nimi", currentUser.getName());
+            emailField = new TextField("Sähköposti", currentUser.getEmail());
+
+            // Tallenna-painike
+            Button saveButton = new Button("Tallenna", e -> {
+                saveUserProfile();
+            });
+
+            // Elokuvat Grid
+            userMoviesGrid = new Grid<>(Movie.class);
+            userMoviesGrid.setColumns("title", "director", "releaseYear", "genre", "description");
+            userMoviesGrid.addComponentColumn(movie -> {
+                Button editButton = new Button("Muokkaa", e -> openEditMovieDialog(movie));
+                Button deleteButton = new Button("Poista", e -> deleteMovie(movie));
+                return new HorizontalLayout(editButton, deleteButton);
+            });
+
+            // Elokuvan lisäämisen painike
+            Button addMovieButton = new Button("Lisää elokuva", e -> openAddMovieDialog());
+
+            // Lisää kentät ja painikkeet lomakkeeseen
+            add(nameField, emailField, saveButton, userMoviesGrid, addMovieButton);
+
+            // Päivitä elokuvat Gridissä
+            updateUserMovies(currentUser);
         } else {
             Notification.show("Et ole kirjautunut sisään.", 3000, Notification.Position.BOTTOM_START);
         }
-    }
-
-    private void createProfileSection(User currentUser) {
-        FormLayout profileForm = new FormLayout();
-        profileForm.setWidth("400px");
-
-        nameField = new TextField("Nimi", currentUser.getName());
-        emailField = new TextField("Sähköposti", currentUser.getEmail());
-
-        Button saveButton = new Button("Tallenna", e -> saveUserProfile());
-        saveButton.getStyle().set("margin-top", "10px");
-
-        profileForm.add(nameField, emailField, saveButton);
-        add(profileForm);
-    }
-
-    private void createMoviesSection(User currentUser) {
-        VerticalLayout moviesSection = new VerticalLayout();
-        moviesSection.setSpacing(true);
-        moviesSection.setPadding(false);
-        moviesSection.setWidth("100%");
-
-        // Otsikko ja lisäysnappi
-        HorizontalLayout header = new HorizontalLayout(new com.vaadin.flow.component.html.H2("Omat elokuvat"));
-        header.setAlignItems(Alignment.CENTER);
-        header.setJustifyContentMode(JustifyContentMode.BETWEEN);
-        header.setWidth("100%");
-
-        Button addMovieButton = new Button("Lisää elokuva", e -> openAddMovieDialog());
-        addMovieButton.getStyle().set("margin-left", "auto");
-        header.add(addMovieButton);
-
-        // Elokuvagrid
-        userMoviesGrid = new Grid<>(Movie.class, false);
-        userMoviesGrid.addColumn(Movie::getTitle).setHeader("Nimi").setAutoWidth(true);
-        userMoviesGrid.addColumn(Movie::getDirector).setHeader("Ohjaaja").setAutoWidth(true);
-        userMoviesGrid.addColumn(Movie::getReleaseYear).setHeader("Julkaisuvuosi").setAutoWidth(true);
-        userMoviesGrid.addColumn(Movie::getGenre).setHeader("Genre").setAutoWidth(true);
-
-        // Toiminnot sarake
-        userMoviesGrid.addComponentColumn(movie -> {
-            Button editButton = new Button("Muokkaa", e -> openEditMovieDialog(movie));
-            Button deleteButton = new Button("Poista", e -> deleteMovie(movie));
-            deleteButton.getStyle().set("color", "var(--lumo-error-color)");
-            return new HorizontalLayout(editButton, deleteButton);
-        }).setHeader("Toiminnot").setAutoWidth(true);
-
-        userMoviesGrid.setWidth("100%");
-        userMoviesGrid.getStyle().set("margin-top", "10px");
-
-        // Päivitä grid käyttäjän elokuvilla
-        updateUserMovies(currentUser);
-
-        moviesSection.add(header, userMoviesGrid);
-        add(moviesSection);
     }
 
     private void saveUserProfile() {
@@ -111,12 +77,8 @@ public class ProfileView extends VerticalLayout {
         if (currentUser != null) {
             currentUser.setName(nameField.getValue());
             currentUser.setEmail(emailField.getValue());
-            try {
-                userService.save(currentUser);
-                Notification.show("Profiilisi on päivitetty!", 3000, Notification.Position.BOTTOM_START);
-            } catch (Exception e) {
-                Notification.show("Virhe: " + e.getMessage(), 3000, Notification.Position.BOTTOM_START);
-            }
+            userService.save(currentUser);
+            Notification.show("Profiilisi on päivitetty!", 3000, Notification.Position.BOTTOM_START);
         } else {
             Notification.show("Jotain meni pieleen. Yritä uudelleen.", 3000, Notification.Position.BOTTOM_START);
         }
@@ -128,24 +90,16 @@ public class ProfileView extends VerticalLayout {
 
         // Lomakekentät
         TextField titleField = new TextField("Elokuvan nimi");
-        titleField.setWidthFull();
-
         TextField directorField = new TextField("Ohjaaja");
-        directorField.setWidthFull();
-
         TextField genreField = new TextField("Genre");
-        genreField.setWidthFull();
-
         TextField yearField = new TextField("Julkaisuvuosi");
-        yearField.setWidthFull();
-
         TextArea descriptionField = new TextArea("Kuvaus");
-        descriptionField.setWidthFull();
         descriptionField.setHeight("150px");
 
         // Tallennuspainike
         Button saveButton = new Button("Tallenna", e -> {
             try {
+                // Luodaan uusi elokuva
                 Movie movie = new Movie();
                 movie.setTitle(titleField.getValue());
                 movie.setDirector(directorField.getValue());
@@ -153,35 +107,43 @@ public class ProfileView extends VerticalLayout {
                 movie.setReleaseYear(Integer.parseInt(yearField.getValue()));
                 movie.setDescription(descriptionField.getValue());
 
+                // Tallennetaan elokuva
                 Movie savedMovie = movieService.save(movie);
-                User currentUser = authenticatedUser.get().orElseThrow();
-                currentUser.getOwnMovies().add(savedMovie);
-                userService.save(currentUser);
 
+                // Lisätään elokuva käyttäjälle
+                User currentUser = authenticatedUser.get().orElseThrow();
+                userService.addMovieToUser(currentUser, savedMovie);
+
+                // Päivitä näyttö
                 updateUserMovies(currentUser);
                 Notification.show("Elokuva lisätty onnistuneesti!");
                 addMovieDialog.close();
             } catch (NumberFormatException ex) {
-                Notification.show("Virheellinen vuosiluku", 3000, Notification.Position.BOTTOM_START);
+                Notification.show("Virheellinen vuosiluku");
             } catch (Exception ex) {
-                Notification.show("Virhe: " + ex.getMessage(), 3000, Notification.Position.BOTTOM_START);
+                Notification.show("Virhe: " + ex.getMessage());
             }
         });
 
         // Peruutuspainike
         Button cancelButton = new Button("Peruuta", e -> addMovieDialog.close());
-        cancelButton.getStyle().set("margin-left", "auto");
 
+        // Aseta painikkeet vierekkäin
         HorizontalLayout buttons = new HorizontalLayout(saveButton, cancelButton);
-        buttons.setWidthFull();
+        buttons.setSpacing(true);
 
-        VerticalLayout dialogLayout = new VerticalLayout(
-                titleField, directorField, genreField, yearField, descriptionField, buttons
+        // Lisää komponentit dialogiin
+        addMovieDialog.add(
+                new VerticalLayout(
+                        titleField,
+                        directorField,
+                        genreField,
+                        yearField,
+                        descriptionField,
+                        buttons
+                )
         );
-        dialogLayout.setSpacing(true);
-        dialogLayout.setPadding(false);
 
-        addMovieDialog.add(dialogLayout);
         addMovieDialog.open();
     }
 
@@ -190,43 +152,8 @@ public class ProfileView extends VerticalLayout {
     }
 
     private void openEditMovieDialog(Movie movie) {
-        Dialog editDialog = new Dialog();
-        editDialog.setWidth("400px");
-
-        TextField titleField = new TextField("Nimi", movie.getTitle(), "");
-        TextField directorField = new TextField("Ohjaaja", movie.getDirector(), "");
-        TextField yearField = new TextField("Julkaisuvuosi", String.valueOf(movie.getReleaseYear()), "");
-        TextField genreField = new TextField("Genre", movie.getGenre(), "");
-        TextArea descriptionField = new TextArea("Kuvaus", movie.getDescription(), "");
-        descriptionField.setHeight("150px");
-
-        Button saveButton = new Button("Tallenna", e -> {
-            try {
-                movie.setTitle(titleField.getValue());
-                movie.setDirector(directorField.getValue());
-                movie.setReleaseYear(Integer.parseInt(yearField.getValue()));
-                movie.setGenre(genreField.getValue());
-                movie.setDescription(descriptionField.getValue());
-
-                movieService.save(movie);
-                updateUserMovies(authenticatedUser.get().orElseThrow());
-                Notification.show("Elokuva päivitetty!");
-                editDialog.close();
-            } catch (Exception ex) {
-                Notification.show("Virhe: " + ex.getMessage());
-            }
-        });
-
-        Button cancelButton = new Button("Peruuta", e -> editDialog.close());
-
-        HorizontalLayout buttons = new HorizontalLayout(saveButton, cancelButton);
-        buttons.setWidthFull();
-        cancelButton.getStyle().set("margin-left", "auto");
-
-        editDialog.add(new VerticalLayout(
-                titleField, directorField, yearField, genreField, descriptionField, buttons
-        ));
-        editDialog.open();
+        // Voit toteuttaa muokkauslogiikan tähän (esimerkiksi avata muokkausmodaali)
+        Notification.show("Muokkauslogiikka menee tänne", 3000, Notification.Position.BOTTOM_START);
     }
 
     private void deleteMovie(Movie movie) {

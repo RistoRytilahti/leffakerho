@@ -40,7 +40,7 @@ public class LoginView extends LoginOverlay implements BeforeEnterObserver {
         if (authenticatedUser.get().isPresent()) {
             // User is already logged in, so redirect to the main page
             setOpened(false);
-            event.forwardTo("main"); // Redirect to the "main" view after successful login
+            event.forwardTo("/main"); // Redirect to the "main" view after successful login
         } else {
             // If the user is not logged in, set the error flag if the query contains "error"
             setError(event.getLocation().getQueryParameters().getParameters().containsKey("error"));

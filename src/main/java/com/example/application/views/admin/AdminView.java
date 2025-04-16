@@ -30,7 +30,7 @@ public class AdminView extends VerticalLayout implements BeforeEnterObserver {
         if (currentUser == null || !currentUser.getAuthorities().stream()
                 .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"))) {
             // Jos käyttäjä ei ole admin, ohjataan "access-denied" sivulle
-            event.forwardTo("access-denied");
+            event.forwardTo("/access-denied");
         }
     }
 }
