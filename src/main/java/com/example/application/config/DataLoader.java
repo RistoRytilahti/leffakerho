@@ -30,6 +30,7 @@ public class DataLoader implements CommandLineRunner {
             user.setName("User");
             user.setHashedPassword(passwordEncoder.encode("user"));
             user.setRoles(Set.of(Role.USER)); // Asetetaan rooli "USER"
+            user.setEmail("user@example.com");
             userRepository.save(user);
 
             // Luodaan "admin" käyttäjä
@@ -38,6 +39,7 @@ public class DataLoader implements CommandLineRunner {
             admin.setName("Admin");
             admin.setHashedPassword(passwordEncoder.encode("admin"));
             admin.setRoles(Set.of(Role.ADMIN)); // Asetetaan rooli "ADMIN"
+            admin.setEmail("admin@example.com");
             userRepository.save(admin);
         }
     }
