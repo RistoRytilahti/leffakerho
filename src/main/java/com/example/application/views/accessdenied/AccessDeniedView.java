@@ -20,8 +20,6 @@ public class AccessDeniedView extends VerticalLayout {
         setAlignItems(Alignment.CENTER);
         setJustifyContentMode(JustifyContentMode.CENTER);
 
-        Image image = new Image("images/access-denied.png", "Pääsy evätty");
-        image.setWidth("200px");
 
         H1 header = new H1("Pääsy evätty!");
         header.getStyle().set("color", "var(--lumo-error-text-color)");
@@ -29,6 +27,6 @@ public class AccessDeniedView extends VerticalLayout {
         Paragraph text = new Paragraph("Sinulla ei ole tarvittavia oikeuksia tälle sivulle.");
         text.getStyle().set("text-align", "center");
 
-        add(image, header, text);
+        add(header, text);
     }
 }

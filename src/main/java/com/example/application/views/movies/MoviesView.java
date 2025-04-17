@@ -4,6 +4,7 @@ import com.example.application.data.Movie;
 import com.example.application.services.MovieService;
 import com.example.application.views.MainLayout;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
@@ -33,6 +34,9 @@ public class MoviesView extends VerticalLayout {
         setSizeFull();
         setSpacing(true);
         setPadding(true);
+
+        H1 header = new H1("Kaikki elokuvat:");
+        add(header);
 
         titleFilter.setPlaceholder("Hae nimen mukaan");
         directorFilter.setPlaceholder("Hae ohjaajan mukaan");

@@ -2,6 +2,9 @@ package com.example.application.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
 import java.util.*;
 
 @Entity
@@ -10,6 +13,9 @@ public class User extends AbstractEntity {
 
     private String username;
     private String name;
+    @Column(nullable = false, unique = true)
+    @Email
+    @NotBlank
     private String email;
 
 

@@ -25,25 +25,22 @@ public class UserService {
     }
 
     // Tallentaa käyttäjän tietokantaan (voi luoda tai päivittää)
-    // Uusi versio save-metodista, joka sallii olemassa olevan käyttäjän päivityksen
     public User save(User entity) {
         if (entity.getEmail() == null || entity.getEmail().isEmpty()) {
             throw new IllegalArgumentException("Sähköpostiosoite ei voi olla tyhjä");
         }
 
-        // Tarkista onko käyttäjä jo olemassa (päivitystapaus)
-        Optional<User> existingUser = repository.findById(entity.getId());
+        // Check if email exists only for new users or when email changes
+        Optional<User> existingUser = entity.getId() != null ? repository.findById(entity.getId()) : Optional.empty();
+
         if (existingUser.isPresent()) {
-            // Jos sähköposti on muuttunut, tarkista onko uusi sähköposti vapaa
-            if (!existingUser.get().getEmail().equals(entity.getEmail()) &&
+            // Only check email if it's being changed
+            if (!entity.getEmail().equals(existingUser.get().getEmail()) &&
                     repository.existsByEmail(entity.getEmail())) {
                 throw new IllegalArgumentException("Sähköposti on jo käytössä");
             }
-        } else {
-            // Uusi käyttäjä - tarkista että sähköposti on vapaa
-            if (repository.existsByEmail(entity.getEmail())) {
-                throw new IllegalArgumentException("Sähköposti on jo käytössä");
-            }
+        } else if (repository.existsByEmail(entity.getEmail())) {
+            throw new IllegalArgumentException("Sähköposti on jo käytössä");
         }
 
         return repository.save(entity);

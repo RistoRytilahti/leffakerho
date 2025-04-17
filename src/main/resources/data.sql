@@ -1,8 +1,7 @@
--- Example data.sql to populate the database with initial values
-INSERT INTO app_user (id, version, username, name, hashed_password) VALUES
-                                                                        (1000, 0, 'user', 'User', '$2a$10$HL6ptCt/dcrqZcLESiMxmObFsJDnZgnPcHErFK.zXmL0m0i14Epza'),
-                                                                        (1001, 0, 'admin', 'Admin', '$2a$10$AoqKsBmPAk1yhu8NZrQu2uDKMqJ70NUJrjyLFEaxmfx61nELUwygG');
-
+INSERT INTO app_user (id, version, username, name, email, hashed_password)
+VALUES
+    (1000, 0, 'user', 'User', 'user@example.com', '$2a$10$HL6ptCt/dcrqZcLESiMxmObFsJDnZgnPcHErFK.zXmL0m0i14Epza'),
+    (1001, 0, 'admin', 'Admin', 'admin@example.com', '$2a$10$AoqKsBmPAk1yhu8NZrQu2uDKMqJ70NUJrjyLFEaxmfx61nELUwygG');
 -- Lisää roolit oikeaan tauluun
 INSERT INTO user_roles (user_id, roles) VALUES
                                             (1000, 'USER'),
