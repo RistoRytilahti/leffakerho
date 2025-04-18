@@ -12,7 +12,7 @@ import org.springframework.security.access.annotation.Secured;
 import jakarta.annotation.security.RolesAllowed;
 
 @PageTitle("Etusivu | Leffakerho")
-@Route(value = "main", layout = MainLayout.class)
+@Route(value = "", layout = MainLayout.class)
 @RolesAllowed({"ROLE_USER", "ROLE_ADMIN"})
 public class MainView extends VerticalLayout {
 

@@ -36,7 +36,7 @@ public class SecurityConfiguration extends VaadinWebSecurity {
         // Asetetaan kirjautumissivu JA pakotetaan ohjaus /main-reitille
         super.configure(http);
 
-        setLoginView(http, LoginView.class, "/main");
+        setLoginView(http, LoginView.class, "/");
     }
 
 }

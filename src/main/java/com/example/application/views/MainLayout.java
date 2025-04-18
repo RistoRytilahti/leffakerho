@@ -66,7 +66,7 @@ public class MainLayout extends AppLayout {
         SideNav nav = new SideNav();
 
         // Lisätään navigointikohteet käsin
-        nav.addItem(new SideNavItem("Koti", "main", new Icon("lumo", "star")));
+        nav.addItem(new SideNavItem("Koti", "", new Icon("lumo", "star")));
         nav.addItem(new SideNavItem("Elokuvat", "movies", new Icon("lumo", "film")));
         nav.addItem(new SideNavItem("Profiili", "profile", new Icon("lumo", "user")));
         nav.addItem(new SideNavItem("Arvostelut", "reviews", new Icon("lumo", "star")));

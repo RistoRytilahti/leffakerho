@@ -1,5 +1,6 @@
 package com.example.application.services;
 
+import com.example.application.data.Movie;
 import com.example.application.data.Review;
 import com.example.application.data.ReviewRepository;
 import org.springframework.stereotype.Service;
@@ -31,4 +32,9 @@ public class ReviewService {
     public void deleteById(Long id) {
         reviewRepository.deleteById(id);
     }
+
+    public List<Review> findByMovie(Movie movie) {
+        return reviewRepository.findByMovie(movie);
+    }
+
 }
