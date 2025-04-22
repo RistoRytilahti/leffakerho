@@ -6,6 +6,7 @@ import com.example.application.views.MainLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
@@ -32,6 +33,8 @@ public class MoviesView extends VerticalLayout {
     private final TextField genreFilter = new TextField("Genre");
     private final IntegerField yearFilter = new IntegerField("Vuosi");
 
+    private final IntegerField ratingFilter = new IntegerField("Minimiarvosana");
+
     public MoviesView(MovieService movieService) {
         this.movieService = movieService;
 
@@ -41,18 +44,35 @@ public class MoviesView extends VerticalLayout {
 
         H1 header = new H1("Kaikki elokuvat:");
         add(header);
+        add(new Paragraph("Klikkaa elokuvaa niin saat tarkemmat tiedot"));
 
         titleFilter.setPlaceholder("Hae nimen mukaan");
         directorFilter.setPlaceholder("Hae ohjaajan mukaan");
         genreFilter.setPlaceholder("Hae genren mukaan");
         yearFilter.setPlaceholder("Hae julkaisuvuoden mukaan");
+        ratingFilter.setMin(0);
+        ratingFilter.setMax(10);
+        ratingFilter.setPlaceholder("Suodata arvosanan mukaan");
 
         titleFilter.addValueChangeListener(e -> updateList());
         directorFilter.addValueChangeListener(e -> updateList());
         genreFilter.addValueChangeListener(e -> updateList());
         yearFilter.addValueChangeListener(e -> updateList());
+        ratingFilter.addValueChangeListener(e -> updateList()); // Lisää suodatin
 
         grid.setColumns("title", "director", "releaseYear", "genre");
+
+        grid.addColumn(movie -> {
+            List<Double> ratings = movie.getReviews().stream()
+                    .map(review -> (double) review.getRating())
+                    .collect(Collectors.toList());
+            if (ratings.isEmpty()) {
+                return "Ei arvioita";
+            }
+            double average = ratings.stream().mapToDouble(Double::doubleValue).average().orElse(0.0);
+            return String.format("%.1f", average);
+        }).setHeader("Arvosana");
+
         grid.getColumnByKey("title").setHeader("Nimi");
         grid.getColumnByKey("director").setHeader("Ohjaaja");
         grid.getColumnByKey("releaseYear").setHeader("Julkaisuvuosi");
@@ -84,20 +104,22 @@ public class MoviesView extends VerticalLayout {
             }
         });
 
-        HorizontalLayout filters = new HorizontalLayout(titleFilter, directorFilter, genreFilter, yearFilter);
+        HorizontalLayout filters = new HorizontalLayout(titleFilter, directorFilter, genreFilter, yearFilter, ratingFilter);
         add(filters, grid);
         updateList();
     }
 
     private void updateList() {
-        List<Movie> movies = movieService.findAll(); // Hae kaikki elokuvat
+        List<Movie> movies = movieService.findAllWithReviews();
 
-        // Suodatetaan elokuvat muiden hakuehtojen mukaan (nimi, ohjaaja, genre, vuosi)
         movies = movies.stream()
                 .filter(movie -> titleFilter.isEmpty() || movie.getTitle().toLowerCase().contains(titleFilter.getValue().toLowerCase()))
                 .filter(movie -> directorFilter.isEmpty() || movie.getDirector().toLowerCase().contains(directorFilter.getValue().toLowerCase()))
                 .filter(movie -> genreFilter.isEmpty() || movie.getGenre().toLowerCase().contains(genreFilter.getValue().toLowerCase()))
                 .filter(movie -> yearFilter.isEmpty() || movie.getReleaseYear() == yearFilter.getValue())
+                .filter(movie -> ratingFilter.isEmpty() || movie.getReviews().stream()
+                        .mapToDouble(review -> (double) review.getRating()) // Arvosanojen kerääminen
+                        .average().orElse(0.0) >= ratingFilter.getValue()) // Keskiarvon laskeminen ja suodattaminen
                 .collect(Collectors.toList());
 
         grid.setItems(movies);

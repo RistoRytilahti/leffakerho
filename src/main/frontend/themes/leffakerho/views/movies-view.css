@@ -1,3 +1,4 @@
+/* Filter layout styles */
 .movies-view .filter-layout {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -23,6 +24,21 @@
 
 .movies-view .filter-layout vaadin-combo-box {
   --vaadin-field-default-width: auto;
+}
+
+/* Grid row hover effects */
+.movies-view vaadin-grid [part~="row"]:hover {
+  background-color: var(--lumo-contrast-5pct);
+  cursor: pointer;
+}
+
+.movies-view vaadin-grid [part~="row"] {
+  transition: background-color 0.2s ease;
+}
+
+/* Active state when clicking */
+.movies-view vaadin-grid [part~="row"]:active {
+  background-color: var(--lumo-contrast-10pct);
 }
 
 /* Mobile filters */

@@ -68,4 +68,10 @@ public class MovieService {
             movieRepository.delete(movie);
         });
     }
+
+    public List<Movie> findAllWithReviews() {
+        return movieRepository.findAllWithReviews();
+    }
+
+
 }

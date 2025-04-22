@@ -18,6 +18,10 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
             "HAVING AVG(r.rating) >= :rating")
     List<Movie> findByAverageRatingGreaterThanEqual(@Param("rating") double rating);
 
+    @Query("SELECT DISTINCT m FROM Movie m LEFT JOIN FETCH m.reviews")
+    List<Movie> findAllWithReviews();
+
+
 }
 
 
