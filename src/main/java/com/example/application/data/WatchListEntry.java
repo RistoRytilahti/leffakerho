@@ -1,6 +1,7 @@
 package com.example.application.data;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 import java.time.LocalDateTime;
@@ -9,15 +10,18 @@ import java.time.LocalDateTime;
 public class WatchListEntry extends AbstractEntity {
 
     @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne
+    @JoinColumn(name = "movie_id", nullable = false)
     private Movie movie;
+
+    private boolean watched = false;
 
     private LocalDateTime addedAt = LocalDateTime.now();
 
-    // getterit ja setterit
-
+    // Getterit ja setterit
 
     public User getUser() {
         return user;
@@ -33,6 +37,14 @@ public class WatchListEntry extends AbstractEntity {
 
     public void setMovie(Movie movie) {
         this.movie = movie;
+    }
+
+    public boolean isWatched() {
+        return watched;
+    }
+
+    public void setWatched(boolean watched) {
+        this.watched = watched;
     }
 
     public LocalDateTime getAddedAt() {

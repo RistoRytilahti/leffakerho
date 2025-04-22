@@ -8,8 +8,8 @@ import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import org.springframework.security.access.annotation.Secured;
 import jakarta.annotation.security.RolesAllowed;
+import com.vaadin.flow.component.html.Image;
 
 @PageTitle("Etusivu | Leffakerho")
 @Route(value = "", layout = MainLayout.class)
@@ -23,9 +23,12 @@ public class MainView extends VerticalLayout {
         User user = authenticatedUser.get().orElse(null);
         String username = user != null ? user.getName() : "Käyttäjä";
 
-        add(
-                new H1("Tervetuloa, " + username + "!"),
-                new Paragraph("Voit selata elokuvia, lukea ja kirjoittaa arvosteluja sekä lisätä suosikkeja omaan listaan.")
-        );
+        H1 header = new H1("Tervetuloa, " + username + "!");
+        Paragraph description = new Paragraph("Voit selata elokuvia, lukea ja kirjoittaa arvosteluja sekä lisätä suosikkeja omaan listaan.");
+
+        Image logo = new Image("/images/logo.png", "Leffakerho logo");
+        logo.setWidth("400px");
+
+        add(header, logo, description);
     }
 }

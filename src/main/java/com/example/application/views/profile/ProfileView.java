@@ -222,9 +222,9 @@ public class ProfileView extends VerticalLayout {  // Changed from FormLayout to
         if (currentUser != null) {
             currentUser.getOwnMovies().remove(movie);
             userService.save(currentUser);
-            movieService.delete(movie.getId());
             updateUserMovies(currentUser);
-            Notification.show("Elokuva poistettu", 3000, Notification.Position.BOTTOM_START);
+            Notification.show("Elokuva poistettu omista elokuvista", 3000, Notification.Position.BOTTOM_START);
         }
     }
+
 }

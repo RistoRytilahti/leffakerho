@@ -4,14 +4,18 @@ import com.example.application.data.Movie;
 import com.example.application.services.MovieService;
 import com.example.application.views.MainLayout;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -53,6 +57,25 @@ public class MoviesView extends VerticalLayout {
         grid.getColumnByKey("director").setHeader("Ohjaaja");
         grid.getColumnByKey("releaseYear").setHeader("Julkaisuvuosi");
         grid.getColumnByKey("genre").setHeader("Genre");
+
+        // Poistonappula vain Adminille
+        if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"))) {
+            grid.addComponentColumn(movie -> {
+                Button deleteButton = new Button("Poista", e -> {
+                    // Varmistetaan poisto ennen
+                    ConfirmDialog confirmDialog = new ConfirmDialog("Varmista poisto",
+                            "Oletko varma, että haluat poistaa elokuvan ja kaikki siihen liittyvät tiedot?", "Poista", event -> {
+                        movieService.deleteCompletely(movie.getId());
+                        Notification.show("Elokuva poistettu.");
+                        updateList();
+                    }, "Peruuta", event -> {
+                    });
+                    confirmDialog.open();
+                });
+                return deleteButton;
+            }).setHeader("Toiminnot");
+        }
 
         grid.asSingleSelect().addValueChangeListener(e -> {
             Movie selectedMovie = e.getValue();

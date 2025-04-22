@@ -70,6 +70,7 @@ public class MainLayout extends AppLayout {
         nav.addItem(new SideNavItem("Elokuvat", "movies", new Icon("lumo", "film")));
         nav.addItem(new SideNavItem("Profiili", "profile", new Icon("lumo", "user")));
         nav.addItem(new SideNavItem("Arvostelut", "reviews", new Icon("lumo", "star")));
+        nav.addItem(new SideNavItem("Suosikit", "watchlist", new Icon("lumo", "star")));
         nav.addItem(new SideNavItem("Admin", "admin", new Icon("lumo", "user")));
 
         return nav;
