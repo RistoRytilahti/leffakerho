@@ -1,3 +1,18 @@
 @import url('./main-layout.css');
 @import url('./views/movies-view.css');
+@import url('./views/main-view.css');
 @import url('./views/reviews-view.css');
+
+
+body {
+
+    font-family: 'Roboto', sans-serif;
+    background-color: #212b3c;
+}
+
+h1 {
+    color: whitesmoke;
+}
+
+
+
