@@ -1,16 +1,19 @@
 /* main-view.css */
 .main-view {
     background-color: #2c3e50;
-    padding: 20px;
+    padding: 10px;
     border-radius: 8px;
 }
 
 .main-header {
+
     color: whitesmoke;
     font-size: 3rem;
 }
 
 .logo {
+    margin-top: 2em;
+    margin-bottom: 2em;
     border-radius: 12px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
 }

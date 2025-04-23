@@ -35,7 +35,8 @@ public class MainView extends VerticalLayout {
         header.addClassNames("main-header", "lumo-text-contrast");
 
         Image logo = new Image("/images/logo.png", "Leffakerho logo");
-        logo.setWidth("400px");
+        logo.setWidth("650px");
+        logo.setHeight("650px");
         logo.addClassNames("logo", "lumo-border-radius");
 
         Paragraph description = new Paragraph("Voit selata elokuvia, lukea ja kirjoittaa arvosteluja sekä lisätä suosikkeja omaan listaan.");

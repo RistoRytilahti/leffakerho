@@ -30,7 +30,7 @@ public class AccessDeniedView extends VerticalLayout {
         accessDeniedImage.addClassName("access-denied-image");
 
         // Lisää otsikko
-        H1 header = new H1("Pääsy evätty!");
+        H1 header = new H1("Kielletty, pääsy on vain Admin-käyttäjälle");
         header.addClassName("error-header");
 
         // Lisää teksti
