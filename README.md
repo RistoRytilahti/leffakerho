@@ -23,7 +23,7 @@ Leffakerho on Java- ja Vaadin-pohjainen SPA (Single Page Application), jonka avu
 
 ## 📦 Tietokanta ja testidata
 
-- Sovellus käyttää PostgreSQL-tietokantaa. Kehitysympäristössä hyödynnetään `data.sql`-tiedostoa, joka sisältää valmiin testidatan: käyttäjät, roolit, elokuvat ja arvostelut.
+- Sovellus käyttää PostgreSQL-tietokantaa. Tietokannan nimi "leffakerho". Kehitysympäristössä hyödynnetään `data.sql`-tiedostoa, joka sisältää valmiin testidatan: käyttäjät, roolit, elokuvat ja arvostelut.
 - Esimerkkitunnukset:
   - Käyttäjä: `user / user`
   - Admin: `admin / admin`

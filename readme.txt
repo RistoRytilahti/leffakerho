@@ -4,6 +4,7 @@ Leffakerho on Java- ja Vaadin-pohjainen SPA (Single Page Application),
 jonka avulla käyttäjät voivat selata, arvostella ja hallinnoida elokuvia, 
 sekä rakentaa omaa katselulistaansa. Sovellus sisältää käyttäjähallinnan ja tietoturvaominaisuudet, 
 toimii Docker-kontissa ja yhdistyy PostgreSQL-tietokantaan Docker Composen avulla.
+Tietokantatyökalu postgreSQL ja kannan nimi "leffakerho".
 
 ---
 
