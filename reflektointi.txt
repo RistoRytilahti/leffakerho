@@ -1,0 +1,25 @@
+Reflektointi
+--
+Tämän projektin tekeminen oli opettavaista ja paikoin myös haastavaa.
+Rehellisesti sanottuna aloitin työn liian myöhään, mikä vaikutti viimeistelyyn ja testaamiseen.
+Alussa oli vaikea hahmottaa kokonaisuutta – en vielä tiennyt, millainen sovelluksesta tulisi,
+joten rakenteet ja ominaisuudet muokkautuivat matkan varrella.
+
+Näkymiä ja entiteettejä tuli lisää sitä mukaa kun toteutus eteni.
+Tämä toi mukanaan myös virheitä, joiden korjaamiseen meni aikaa.
+Esimerkiksi käyttäjän tai elokuvan poistaminen aiheutti ongelmia, jos niihin oli viittauksia arvosteluissa tai suosikeissa.
+Sain suurimman osan hoidettua, mutta ei ole takeita siitä, että kaikki tilanteet olisi katettu.
+Testaamiseen olisi pitänyt panostaa enemmän.
+
+Myös kirjautumisen ja reitityksen toteutus oli aluksi hankalaa, mutta niistä pääsin yli esimerkkien avulla.
+
+Tekoälystä oli apua virheiden ymmärtämisessä ja ratkaisujen etsimisessä, mutta sen avulla tuli myös kokeiltua useita eri tapoja,
+jolloin osa koodista voi olla turhaa tai jäänyt kesken.
+Huomasin myös että AI vei monesti aivan väärille reiteille ja lopulta tuntiesimerkkeistä löytyi ratkaisu.
+Nyt sovellus on siina kunnossa, että sen voi palauttaa.
+
+Sain aikaan varsin kattavan sovelluksen ja melkein kaikki tehtyä.
+Suurin haaste oli arviointimatriisin ja tehtävänannon tulkinta – mitä piti tehdä, mikä riittää, ja mitä jättää loppuun.
+Valitsin aiheen, koska se kiinnosti. Leffakerho tuntui mielekkäältä ja hauskalta toteuttaa.
+On mahdollista, että jatkan projektia myöhemmin: korjaan virheitä, siistin koodia ja viimeistelen käyttöliittymän.
+Tämä oli hyvä harjoitus siitä, miten sovelluksen rakenne ja toiminnallisuus rakentuu askel kerrallaan.

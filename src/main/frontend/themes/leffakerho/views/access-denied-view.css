@@ -1,0 +1,24 @@
+/* Otsikon tyylit */
+.error-header {
+    margin-top: 2em;
+    color: red;
+    font-size: 2.5em;
+    margin-bottom: 1em;
+}
+
+/* Tekstin tyylit */
+.center-text {
+    text-align: center;
+    font-size: 1.2em;
+    margin-top: 1em;
+}
+
+/* Kuvan tyylit */
+.access-denied-image {
+    margin-top: 2em;
+    max-width: 80%;
+    border-radius: 12px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+    height: auto;
+    margin-bottom: 2em;
+}

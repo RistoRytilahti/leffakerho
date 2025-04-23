@@ -1,67 +1,101 @@
-# Leffakerho
+# 🎬 Leffakerho
 
-This project can be used as a starting point to create your own Vaadin application with Spring Boot.
-It contains all the necessary configuration and some placeholder files to get you started.
+Leffakerho on Java- ja Vaadin-pohjainen SPA (Single Page Application), jonka avulla käyttäjät voivat selata, arvostella ja hallinnoida elokuvia, sekä rakentaa omaa katselulistaansa. Sovellus sisältää käyttäjähallinnan ja tietoturvaominaisuudet, toimii Docker-kontissa ja yhdistyy PostgreSQL-tietokantaan Docker Composen avulla.
 
-## Running the application
+---
 
-Open the project in an IDE. You can download the [IntelliJ community edition](https://www.jetbrains.com/idea/download) if you do not have a suitable IDE already.
-Once opened in the IDE, locate the `Application` class and run the main method using "Debug".
+## 🚀 Sovelluksen käynnistys ja käyttö Dockerilla
 
-For more information on installing in various IDEs, see [how to import Vaadin projects to different IDEs](https://vaadin.com/docs/latest/getting-started/import).
+1. **Rakenna projekti (jos et ole vielä buildannut JARia):**
+   ```bash
+   ./mvnw clean package
+   ```
 
-If you install the Vaadin plugin for IntelliJ, you should instead launch the `Application` class using "Debug using HotswapAgent" to see updates in the Java code immediately reflected in the browser.
+2. **Käynnistä sovellus Dockerilla:**
+   ```bash
+   docker compose up --build
+   ```
 
-## Deploying to Production
+3. **Sovellus aukeaa selaimessa osoitteessa:**
+   [http://localhost:8080](http://localhost:8080)
 
-The project is a standard Maven project. To create a production build, call 
+---
 
+## 📦 Tietokanta ja testidata
+
+- Sovellus käyttää PostgreSQL-tietokantaa. Kehitysympäristössä hyödynnetään `data.sql`-tiedostoa, joka sisältää valmiin testidatan: käyttäjät, roolit, elokuvat ja arvostelut.
+- Esimerkkitunnukset:
+  - Käyttäjä: `user / user`
+  - Admin: `admin / admin`
+
+**PostgreSQL-asetukset:**
+```properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/leffakerho
+spring.datasource.username=postgres
+spring.datasource.password=root
+spring.jpa.hibernate.ddl-auto=create-drop
+spring.sql.init.mode=always
+spring.jpa.defer-datasource-initialization=true
 ```
-./mvnw clean package -Pproduction
-```
 
-If you have Maven globally installed, you can replace `./mvnw` with `mvn`.
+## 🔎 Elokuvien suodatus
 
-This will build a JAR file with all the dependencies and front-end resources,ready to be run. The file can be found in the `target` folder after the build completes.
-You then launch the application using 
-```
-java -jar target/leffakerho-1.0-SNAPSHOT.jar
-```
+Käyttäjät voivat suodattaa elokuvia monipuolisesti:
+- Nimen, ohjaajan, genren ja julkaisuvuoden perusteella
+- Keskiarvosanan mukaan (suodatus Review-entiteetin perusteella)
+- Useita ehtoja voi käyttää samanaikaisesti
 
-## Project structure
+---
 
-- `MainLayout.java` in `src/main/java` contains the navigation setup (i.e., the
-  side/top bar and the main menu). This setup uses
-  [App Layout](https://vaadin.com/docs/components/app-layout).
-- `views` package in `src/main/java` contains the server-side Java views of your application.
-- `views` folder in `src/main/frontend` contains the client-side JavaScript views of your application.
-- `themes` folder in `src/main/frontend` contains the custom CSS styles.
+## 🛠️ Sovelluksen käyttö ja näkymät
 
-## Useful links
+- **MainView**: Päänäkymä, jossa käyttäjä näkee valikon ja toivotustekstin
+- **MoviesView**: Elokuvalistaus ja suodatus
+- **MovieDetailView**: Yksittäisen elokuvan tiedot ja arvostelut
+- **ProfileView**: Käyttäjän omien tietojen ja elokuvien hallinta
+- **ReviewsView**: Kaikki arvostelut suodatettavissa
+- **WatchListView**: Suosikkielokuvien hallinta
+- **AdminView**: Käyttäjien ja sisältöjen hallinta (vain adminille)
+- **LoginView**: Kirjautumissivu
+- **AccessDeniedView**: Näkyy, jos käyttäjällä ei ole oikeuksia
 
-- Read the documentation at [vaadin.com/docs](https://vaadin.com/docs).
-- Follow the tutorial at [vaadin.com/docs/latest/tutorial/overview](https://vaadin.com/docs/latest/tutorial/overview).
-- Create new projects at [start.vaadin.com](https://start.vaadin.com/).
-- Search UI components and their usage examples at [vaadin.com/docs/latest/components](https://vaadin.com/docs/latest/components).
-- View use case applications that demonstrate Vaadin capabilities at [vaadin.com/examples-and-demos](https://vaadin.com/examples-and-demos).
-- Build any UI without custom CSS by discovering Vaadin's set of [CSS utility classes](https://vaadin.com/docs/styling/lumo/utility-classes). 
-- Find a collection of solutions to common use cases at [cookbook.vaadin.com](https://cookbook.vaadin.com/).
-- Find add-ons at [vaadin.com/directory](https://vaadin.com/directory).
-- Ask questions on [Stack Overflow](https://stackoverflow.com/questions/tagged/vaadin) or join our [Forum](https://vaadin.com/forum).
-- Report issues, create pull requests in [GitHub](https://github.com/vaadin).
+---
+
+## 🔐 Käyttäjät ja tietoturva
+
+- Spring Security toteuttaa autentikoinnin ja roolituksen (User, Admin)
+- Näkymät ja reitit suojattu käyttäjäroolin mukaan
+- BCrypt-hashaus salasanan tallennukseen
+
+---
+
+## 🧩 Teknologiat ja rakenteet
+
+- **Java 17**, **Spring Boot**, **Vaadin 24+**, **PostgreSQL 15**
+- Frontendissä omat CSS-tyylit ja Lumo utility-luokat
+- Maven-projekti, Dockerfile ja docker-compose.yml mukana
+
+---
 
 
-## Deploying using Docker
+## 📦 Docker-rakenne (manuaalisesti)
 
-To build the Dockerized version of the project, run
+Voit myös rakentaa ja ajaa sovelluksen Dockerilla manuaalisesti:
 
-```
+```bash
 mvn clean package -Pproduction
 docker build . -t leffakerho:latest
-```
-
-Once the Docker image is correctly built, you can test it locally using
-
-```
 docker run -p 8080:8080 leffakerho:latest
 ```
+
+---
+
+## 🔗 Linkkejä
+
+- [Vaadin-dokumentaatio](https://vaadin.com/docs)
+- [Vaadin komponentit](https://vaadin.com/docs/latest/components)
+- [Vaadin start](https://start.vaadin.com/)
+- [Vaadin-esimerkit](https://vaadin.com/examples-and-demos)
+- [Vaadin-foorumi](https://vaadin.com/forum)
+- [Stack Overflow: vaadin](https://stackoverflow.com/questions/tagged/vaadin)
+

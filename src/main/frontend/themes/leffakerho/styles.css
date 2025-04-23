@@ -2,6 +2,7 @@
 @import url('./views/movies-view.css');
 @import url('./views/main-view.css');
 @import url('./views/reviews-view.css');
+@import url('./views/access-denied-view.css');
 
 
 body {

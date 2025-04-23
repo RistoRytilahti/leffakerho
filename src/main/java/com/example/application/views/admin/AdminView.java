@@ -1,6 +1,7 @@
 package com.example.application.views.admin;
 
 import com.example.application.data.*;
+import com.example.application.security.SecurityUtils;
 import com.example.application.services.UserService;
 import com.example.application.views.MainLayout;
 import com.vaadin.flow.component.Text;
@@ -16,6 +17,8 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
@@ -27,8 +30,8 @@ import java.util.List;
 
 @PageTitle("Ylläpito | Leffakerho")
 @Route(value = "admin", layout = MainLayout.class)
-@RolesAllowed("ROLE_ADMIN")
-public class AdminView extends VerticalLayout {
+@RolesAllowed({"ROLE_ADMIN", "ROLE_USER"}) // ei riitä pelkkä admin, user pitää laskea mukaan ja hoitaa reititys beforeenterobserverilla
+public class AdminView extends VerticalLayout implements BeforeEnterObserver {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -145,4 +148,14 @@ public class AdminView extends VerticalLayout {
         List<User> users = userRepository.findAll();
         userGrid.setItems(users);
     }
+
+
+
+    @Override
+    public void beforeEnter(BeforeEnterEvent event) {
+        if (!SecurityUtils.isUserInRole("ROLE_ADMIN")) {
+            event.rerouteTo("access-denied");
+        }
+    }
+
 }
