@@ -13,6 +13,7 @@ http://localhost:8080
 
 ---
 2. Projektin rakenne
+
 leffakerho/
 ├── src/
 │   ├── main/
@@ -22,28 +23,33 @@ leffakerho/
 │   │   │   ├── security/         # Spring Security -konfiguraatiot ja käyttäjänhallinta
 │   │   │   ├── services/         # Sovelluslogiikka (Service-luokat)
 │   │   │   ├── views/            # Vaadin-näkymät ja layoutit
-│   │   │   │   ├── login/        # Kirjautumissivu
-│   │   │   │   ├── mainview/     # MainView.java
-│   │   │   │   ├── movies/       # MovieDetailView.java, MoviesView.java
-│   │   │   │   ├── reviews/      # ReviewsView.java
-│   │   │   │   ├── profile/      # ProfileView.java
-│   │   │   │   ├── watchlist/    # WatchListView.java
-│   │   │   │   ├── admin/        # AdminView.java
-│   │   │   │   └── accessdenied/ # AccessDeniedView.java
-│   │   │   └── application/      # Spring Boot -pääsovellusluokka
+│   │   │   │   ├── login/
+│   │   │   │   ├── mainview/
+│   │   │   │   ├── movies/
+│   │   │   │   ├── reviews/
+│   │   │   │   ├── profile/
+│   │   │   │   ├── watchlist/
+│   │   │   │   ├── admin/
+│   │   │   │   └── accessdenied/
+│   │   │   ├── application/           # Spring Boot -pääsovellusluokka
+│   │   │   └── util/                  # Uusi kansio apuluokille
+│   │   │       └── I18nUtil.java      # Lokalisaation apuluokka
 │   │   ├── frontend/
 │   │   │   ├── themes/leffakerho/
-│   │   │   │   ├── components/   # komponenttien tyylit
-│   │   │   │   ├── views/        # Yksittäisten näkymien tyylit (.css) ns. custom tyylit
-│   │   │   │   ├── theme.json    # Vaadin-teeman määritykset
-│   │   │   │   └── styles.css    # Yleiset tyylit
+│   │   │   │   ├── components/
+│   │   │   │   ├── views/             # Yksittäisten näkymien tyylit (.css) ns. custom tyylit
+│   │   │   │   ├── theme.json
+│   │   │   │   └── styles.css
 │   ├── resources/
-│   │   ├── images/               # Kuvia, kuten logo, accessdenied
-│   │   ├── application.properties # Spring-sovelluksen asetukset
-│   │   └── data.sql              # Esitäyttö tietokantaan
-├── docker-compose.yml            # Docker Compose määrittely
-├── Dockerfile                    # Docker-kuvan rakentaminen
-├── pom.xml                       # Maven-projektin määrittely
+│   │   ├── images/                    # Kuvia, kuten logo, accessdenied
+│   │   ├── messages/                  # Lokalisaatiotiedostot
+│   │   │   ├── messages_fi.properties
+│   │   │   └── messages_en.properties
+│   │   ├── application.properties
+│   │   └── data.sql                   # Esitäyttö tietokantaan
+├── docker-compose.yml                 # Docker Compose määrittely
+├── Dockerfile                         # Docker-kuvan rakentaminen
+├── pom.xml
 └── .gitignore
 
 ---
