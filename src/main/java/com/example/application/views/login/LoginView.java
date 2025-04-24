@@ -26,8 +26,8 @@ public class LoginView extends LoginOverlay implements BeforeEnterObserver {
         // Set localized text for the login form
         LoginI18n i18n = LoginI18n.createDefault();
         i18n.setHeader(new LoginI18n.Header());
-        i18n.getHeader().setTitle("LEFFAKERHO: Kirjaudu sisään");
-        i18n.getHeader().setDescription("Login using user/user or admin/admin");
+        i18n.getHeader().setTitle("LEFFAKERHO");
+        i18n.getHeader().setDescription("Kirjaudu käyttäen: user/user or admin/admin");
         i18n.setAdditionalInformation(null);
         setI18n(i18n);
 
