@@ -4,19 +4,9 @@ Leffakerho on Java- ja Vaadin-pohjainen SPA (Single Page Application), jonka avu
 
 ---
 
-## 🚀 Sovelluksen käynnistys ja käyttö Dockerilla
+## 🚀 Sovelluksen käynnistys
 
-1. **Rakenna projekti (jos et ole vielä buildannut JARia):**
-   ```bash
-   ./mvnw clean package
-   ```
-
-2. **Käynnistä sovellus Dockerilla:**
-   ```bash
-   docker compose up --build
-   ```
-
-3. **Sovellus aukeaa selaimessa osoitteessa:**
+**Sovellus aukeaa selaimessa osoitteessa:**
    [http://localhost:8080](http://localhost:8080)
 
 ---
@@ -83,6 +73,17 @@ Käyttäjät voivat suodattaa elokuvia monipuolisesti:
 
 
 ## 📦 Docker-rakenne (manuaalisesti)
+
+1. **Rakenna projekti (jos et ole vielä buildannut JARia):**
+   ```bash
+   ./mvnw clean package
+   ```
+
+2. **Käynnistä sovellus Dockerilla:**
+   ```bash
+   docker compose up --build
+   ```
+
 
 Voit myös rakentaa ja ajaa sovelluksen Dockerilla manuaalisesti:
 
