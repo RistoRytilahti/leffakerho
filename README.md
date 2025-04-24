@@ -21,6 +21,10 @@ Leffakerho on Java- ja Vaadin-pohjainen SPA (Single Page Application), jonka avu
 
 ---
 
+## 🌐 Lokalisointi
+
+Sovelluksessa on toteutettu lokalisointi (FI/EN) resurssitiedostojen avulla. MainView-sivu näyttää eri tekstit käyttäjän kieliasetuksen mukaan.
+
 ## 📦 Tietokanta ja testidata
 
 - Sovellus käyttää PostgreSQL-tietokantaa. Tietokannan nimi "leffakerho". Kehitysympäristössä hyödynnetään `data.sql`-tiedostoa, joka sisältää valmiin testidatan: käyttäjät, roolit, elokuvat ja arvostelut.

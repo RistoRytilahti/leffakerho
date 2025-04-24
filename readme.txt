@@ -195,7 +195,14 @@ leffakerho/
 docker compose up --build
 
 ---
-9. Tekniset yksityiskohdat
+9. Lokalisointi
+
+   Sovelluksessa on toteutettu lokalisointi (FI/EN) resurssitiedostojen avulla.
+   MainView-sivu näyttää eri tekstit käyttäjän kieliasetuksen mukaan.
+
+
+---
+10. Tekniset yksityiskohdat
 
     	- Vaadin 24+
 

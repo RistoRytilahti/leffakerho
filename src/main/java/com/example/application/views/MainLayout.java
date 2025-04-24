@@ -2,9 +2,11 @@ package com.example.application.views;
 
 import com.example.application.data.User;
 import com.example.application.security.AuthenticatedUser;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.avatar.Avatar;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
@@ -14,14 +16,18 @@ import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.menubar.MenuBar;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.sidenav.SideNav;
 import com.vaadin.flow.component.sidenav.SideNavItem;
 import com.vaadin.flow.router.Layout;
 import com.vaadin.flow.server.StreamResource;
+import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import java.io.ByteArrayInputStream;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 /**
@@ -32,14 +38,23 @@ public class MainLayout extends AppLayout {
 
     private H1 viewTitle;
     private AuthenticatedUser authenticatedUser;
+    private ComboBox<String> languageSelect;
 
     public MainLayout(AuthenticatedUser authenticatedUser) {
         this.authenticatedUser = authenticatedUser;
+
+        // Aseta kieli session mukaan tai oletus (suomi)
+        Locale currentLocale = VaadinSession.getCurrent().getLocale();
+        if (currentLocale == null) {
+            currentLocale = new Locale("fi", "FI");
+            VaadinSession.getCurrent().setLocale(currentLocale);
+        }
 
         // Määritellään pääosio ja lisätään sisältö
         setPrimarySection(Section.DRAWER);
         addDrawerContent();
         addHeaderContent();
+        createLanguageSelector(currentLocale);
     }
 
     private void addHeaderContent() {
@@ -50,6 +65,28 @@ public class MainLayout extends AppLayout {
         viewTitle.addClassNames(LumoUtility.FontSize.LARGE, LumoUtility.Margin.NONE);
 
         addToNavbar(true, toggle, viewTitle);
+    }
+
+    private void createLanguageSelector(Locale currentLocale) {
+        languageSelect = new ComboBox<>();
+        languageSelect.setItems("Suomi", "English");
+
+        languageSelect.setValue(currentLocale.getLanguage().equals("en") ? "English" : "Suomi");
+
+        languageSelect.addValueChangeListener(e -> {
+            Locale newLocale = "English".equals(e.getValue()) ? Locale.ENGLISH : new Locale("fi", "FI");
+            VaadinSession.getCurrent().setLocale(newLocale);
+            UI.getCurrent().getPage().reload();
+        });
+
+        // Tämä layout vie ComboBoxin oikeaan reunaan
+        HorizontalLayout rightAlignLayout = new HorizontalLayout(languageSelect);
+        rightAlignLayout.setWidthFull();
+        rightAlignLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
+        rightAlignLayout.setPadding(false);
+        rightAlignLayout.setSpacing(false);
+
+        addToNavbar(rightAlignLayout);
     }
 
     private void addDrawerContent() {
